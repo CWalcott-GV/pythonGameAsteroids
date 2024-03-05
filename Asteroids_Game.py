@@ -10,12 +10,18 @@ class Asteroids_Game:
         self.screen = pygame.display.set_mode((800, 600))
         self.background = load_sprite("space", False)
         self.clock = pygame.time.Clock()
-        self.spaceship = GameObject(
-            (400, 300), load_sprite("spaceship_resize"), (0, 0)
-        )
-        self.asteroid = GameObject(
-            (400, 300), load_sprite("asteroid"), (1, 0)
-        )
+        self.spaceship = Spaceship((400, 300))
+
+        '''
+        
+        
+        
+        removed asteroid object call, because of GameObject base class is gonna
+        be inherited by other classes, check models.py for more. it'll be
+    
+
+
+        '''
 
     def main_loop(self):
         while True:
