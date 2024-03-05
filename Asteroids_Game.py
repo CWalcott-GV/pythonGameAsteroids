@@ -1,13 +1,21 @@
 import pygame
 
+from models import GameObject
 from utils import load_sprite
-from pygame.math import Vector2
+from models import Spaceship
 
 class Asteroids_Game:
     def __init__(self):
         self._init_pygame()
         self.screen = pygame.display.set_mode((800, 600))
         self.background = load_sprite("space", False)
+        self.clock = pygame.time.Clock()
+        self.spaceship = GameObject(
+            (400, 300), load_sprite("spaceship_resize"), (0, 0)
+        )
+        self.asteroid = GameObject(
+            (400, 300), load_sprite("asteroid"), (1, 0)
+        )
 
     def main_loop(self):
         while True:
@@ -25,26 +33,13 @@ class Asteroids_Game:
                 quit()
 
     def _process_game_logic(self):
-        pass
+        self.spaceship.move()
+        self.asteroid.move()
 
     def _draw(self):
         self.screen.blit(self.background, (0, 0))
+        self.spaceship.draw(self.screen)
+        self.asteroid.draw(self.screen)
+        print("Collides:", self.spaceship.collides_with(self.asteroid))
         pygame.display.flip()
-
-class GameObject:
-    def __init__(self, position, sprite, velocity):
-        self.position = Vector2(position)
-        self.sprite = sprite
-        self.radius = sprite.get_width() / 2
-        self.velocity = Vector2(velocity)
-
-    def draw(self, surface):
-        blit_position = self.position - Vector2(self.radius)
-        surface.blit(self.sprite, blit_position)
-
-    def move(self):
-        self.position = self.position + self.velocity
-
-    def collides_with(self, other_obj):
-        distance = self.position.distance_to(other_obj.position)
-        return distance < self.radius + other_obj.radius
+        self.clock.tick(60)
