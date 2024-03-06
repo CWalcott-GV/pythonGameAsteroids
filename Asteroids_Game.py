@@ -14,13 +14,9 @@ class Asteroids_Game:
 
         '''
         
-        
-        
         removed asteroid object call, because of GameObject base class is gonna
         be inherited by other classes, check models.py for more. it'll be
     
-
-
         '''
 
     def main_loop(self):
@@ -46,6 +42,9 @@ class Asteroids_Game:
         self.screen.blit(self.background, (0, 0))
         self.spaceship.draw(self.screen)
         self.asteroid.draw(self.screen)
+
+        #test print for collision returns true if collided with asteroid
         print("Collides:", self.spaceship.collides_with(self.asteroid))
+
         pygame.display.flip()
         self.clock.tick(60)

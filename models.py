@@ -22,4 +22,4 @@ class GameObject:
 
 class Spaceship(GameObject): #calls GameObject constructor with specific image with zero velocity
     def __init__(self, position):
-        super().__init__(position, load_sprite("spaceship_resized"), Vector2(0))
+        super().__init__(position, load_sprite("spaceship_resize"), Vector2(0))
