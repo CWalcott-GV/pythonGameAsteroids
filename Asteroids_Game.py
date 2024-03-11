@@ -34,17 +34,24 @@ class Asteroids_Game:
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 quit()
 
+        is_key_pressed = pygame.key.get_pressed()
+
+        if is_key_pressed[pygame.K_RIGHT]:
+            self.spaceship.rotate(clockwise=True)
+        elif is_key_pressed[pygame.K_LEFT]:
+            self.spaceship.rotate(clockwise=False)
+
     def _process_game_logic(self):
         self.spaceship.move()
-        self.asteroid.move()
+        #self.asteroid.move()
 
     def _draw(self):
         self.screen.blit(self.background, (0, 0))
         self.spaceship.draw(self.screen)
-        self.asteroid.draw(self.screen)
+        #self.asteroid.draw(self.screen)
 
         #test print for collision returns true if collided with asteroid
-        print("Collides:", self.spaceship.collides_with(self.asteroid))
+        #print("Collides:", self.spaceship.collides_with(self.asteroid))
 
         pygame.display.flip()
         self.clock.tick(60)
