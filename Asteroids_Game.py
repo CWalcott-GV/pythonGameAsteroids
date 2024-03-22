@@ -1,8 +1,10 @@
+#when the guide says "spacerocks class" this is what it means, renamed it.
+
 import pygame
 
 from models import GameObject
 from utils import load_sprite
-from models import Spaceship
+from models import Spaceship, Asteroid
 
 class Asteroids_Game:
     def __init__(self):
@@ -11,11 +13,13 @@ class Asteroids_Game:
         self.background = load_sprite("space", False)
         self.clock = pygame.time.Clock()
         self.spaceship = Spaceship((400, 300))
+        self.asteroids = [Asteroid((0,0)) for _ in range(6)] #calls asteroids all starting at 0,0
 
         '''
         
         removed asteroid object call, because of GameObject base class is gonna
-        be inherited by other classes, check models.py for more. it'll be
+        be inherited by other classes, check models.py for more. it'll be its own class
+        inside the models.py.
     
         '''
 
@@ -40,18 +44,21 @@ class Asteroids_Game:
             self.spaceship.rotate(clockwise=True)
         elif is_key_pressed[pygame.K_LEFT]:
             self.spaceship.rotate(clockwise=False)
+        if is_key_pressed[pygame.K_UP]:
+            self.spaceship.accelerate()
 
     def _process_game_logic(self):
-        self.spaceship.move()
-        #self.asteroid.move()
+        for game_object in self._get_game_objects():
+            game_object.move(self.screen)
 
     def _draw(self):
         self.screen.blit(self.background, (0, 0))
-        self.spaceship.draw(self.screen)
-        #self.asteroid.draw(self.screen)
 
-        #test print for collision returns true if collided with asteroid
-        #print("Collides:", self.spaceship.collides_with(self.asteroid))
+        for game_object in self._get_game_objects():
+            game_object.draw(self.screen)
 
         pygame.display.flip()
         self.clock.tick(60)
+
+    def _get_game_objects(self):
+        return [*self.asteroids, self.spaceship]
