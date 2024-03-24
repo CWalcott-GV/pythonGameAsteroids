@@ -1,6 +1,8 @@
 from pygame.image import load
 from pygame.math import Vector2
 
+import random
+
 def load_sprite(name, with_alpha=True):
     path = f"assets/sprites/{name}.png"
     loaded_sprite = load(path)
