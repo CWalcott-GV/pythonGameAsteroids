@@ -1,6 +1,6 @@
 from pygame.math import Vector2
 from pygame.transform import rotozoom
-from utils import load_sprite, wrap_position
+from utils import load_sprite, wrap_position, get_random_velocity
 
 UP = Vector2(0, -1)
 #negative value points upwards.
@@ -29,9 +29,12 @@ class Spaceship(GameObject): #calls GameObject constructor with specific image w
     #attributes in the future. (hint inertia, hull health, weapons)
 
     SPIN_SPEED = 3
-    MANEUVERABILITY = 3
-    ACCELERATION = 0.25
-    def __init__(self, position):
+    MANEUVERABILITY = 2.5
+    ACCELERATION = 0.15
+    BULLET_SPEED = 3
+    def __init__(self, position, create_bullet_callback):
+        self.create_bullet_callback = create_bullet_callback
+
         self.direction = Vector2(UP)#default facing direction
         super().__init__(position, load_sprite("spaceship_resize"), Vector2(0))
 
@@ -50,7 +53,21 @@ class Spaceship(GameObject): #calls GameObject constructor with specific image w
     def accelerate(self): #WE SCHMOOVIN'
         self.velocity += self.direction * self.ACCELERATION
 
+    def shoot(self):
+        bullet_velocity = self.direction * self.BULLET_SPEED + self.velocity #calculate bullet speed
+        bullet = Bullet(self.position, bullet_velocity) #create bullet instance in here
+        self.create_bullet_callback(bullet) #use callback to add bullets to game
+
 
 class Asteroid(GameObject):
     def __init__(self, position):
-        super().__init__(position, load_sprite("asteroid"), (0,0))
+        super().__init__(
+            position, load_sprite("asteroid"), get_random_velocity(1, 3)
+        )
+
+class Bullet(GameObject):
+    def __init__(self, position, velocity):
+        super().__init__(position, load_sprite("bullet"), velocity)
+
+    def move(self, surface):
+        self.position = self.position + self.velocity
